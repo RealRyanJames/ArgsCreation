@@ -1,8 +1,10 @@
 package rsfilecontext
 
 import (
+	typesparams "ArgsCreation/TypesParams"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type CommandWindowPrompt struct {
@@ -19,18 +21,36 @@ func (ctx ArgsContext) GetContext() string {
 	return fmt.Sprintf("%s", ctx.args)
 }
 
+func isNil(e error) bool {
+
+	return e != nil
+}
+
 func RSFile() {
+
 	cmd := CommandWindowPrompt{
 		CheckIsOpen: func(fileName string) string {
 
-			if fileName == "ts" {
-				fileName = "main.ts"
-			} else {
-				fileName = "main.rs"
+			ctx := ArgsContext{
+				args: ArgsContexts(strings.ToLower(fileName)),
 			}
 
-			f, err := os.Create(fileName)
-			if err != nil {
+			crt := typesparams.FileType{
+				RS: "main.rs",
+			}
+
+			crt_2 := typesparams.FileType{
+				JS: "main.ts",
+			}
+
+			if ctx.GetContext() == crt.GetFileType() {
+				fileName = crt.GetFileType()
+			} else if ctx.GetContext() == crt.GetFileType() {
+				fileName = crt_2.GetFileType()
+			}
+
+			f, err := os.Create(ctx.GetContext())
+			if isNil(err) {
 				fmt.Println(err)
 			}
 
@@ -38,7 +58,6 @@ func RSFile() {
 			fmt.Println(f.Name())
 
 			return f.Name()
-
 		},
 	}
 
@@ -47,7 +66,7 @@ func RSFile() {
 	}
 
 	if os.Args[1] == ctx_rs.GetContext() {
-		cmd.CheckIsOpen("rs")
+		cmd.CheckIsOpen("main.rs")
 	}
 
 }
