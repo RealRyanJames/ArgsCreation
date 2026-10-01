@@ -65,8 +65,14 @@ func RSFile() {
 		args: "/RS",
 	}
 
+	ctx_other := ArgsContext{
+		args: "/OTR",
+	}
+
 	if os.Args[1] == ctx_rs.GetContext() {
 		cmd.CheckIsOpen("main.rs")
+	} else if os.Args[1] == ctx_other.GetContext() {
+		cmd.CheckIsOpen(os.Args[2])
 	}
 
 }
